@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "joint-control-system"
+version = "0.1.0"
+description = "\"app to set your ass on fire\""
+authors = ["Uladzislau Mitskevich <u.mitskevich@teslasuit.io>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "3.9.0 - 3.11.2"
+numpy = "^1.22.4"
+pandas = "^1.4.2"
+scipy = "^1.8.1"
+PyQt5 = "^5.15.6"
+easygui = "^0.98.3"
+simple-pid = "^1.0.1"
+pyqtgraph = "^0.12.4"
+
+[tool.poetry.dev-dependencies]
+python = "3.9.0 - 3.11.2"
+numpy = "^1.22.4"
+pandas = "^1.4.2"
+scipy = "^1.8.1"
+PyQt5 = "^5.15.6"
+easygui = "^0.98.3"
+simple-pid = "^1.0.1"
+pyqtgraph = "^0.12.4"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
