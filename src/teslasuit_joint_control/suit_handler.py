@@ -1,7 +1,7 @@
 import sys
-import os
-ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
-sys.path.append(ts_api_path)
+# import os
+# ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
+# sys.path.append(ts_api_path)
 from teslasuit_sdk import ts_api
 
 
@@ -59,7 +59,7 @@ class Teslasuit():
         mapping_handle = suit.get_mapping()
         layouts = mapper.get_layouts(mapping_handle)
         for i in range(0, len(layouts)):
-            if mapper.get_layout_element_type(ayouts[i]) == 2 and mapper.get_layout_type(layouts[i]) == 1:
+            if mapper.get_layout_element_type(layouts[i]) == 2 and mapper.get_layout_type(layouts[i]) == 1:
                 break
         bones = mapper.get_layout_bones(layouts[i])
 

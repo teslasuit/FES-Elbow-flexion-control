@@ -6,15 +6,18 @@ possibility to calibrate controller manually and both manual and opposite-side c
 import os
 import sys
 import time
+import ctypes
+import uuid
 import numpy as np
+import pyqtgraph
 from scipy.fft import rfft, rfftfreq
 from PyQt5 import QtCore, QtWidgets
 from src.teslasuit_joint_control.suit_handler import Teslasuit
 from src.teslasuit_joint_control.control_system import *
 from src.teslasuit_joint_control.main_window import PIDMainWindow
 
-ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
-sys.path.append(ts_api_path)
+# ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
+# sys.path.append(ts_api_path)
 
 
 class App(PIDMainWindow):
@@ -79,6 +82,7 @@ class App(PIDMainWindow):
 
     def reset_PID(self):
         self.pid_parameters_list = [0, 0, 0]
+        self.controlled_joint.controller.saggital_plane_controller.agonist_controller.reset_pid()
         self.slider_P.setValue(0)
         self.slider_I.setValue(0)
         self.slider_D.setValue(0)
@@ -86,7 +90,7 @@ class App(PIDMainWindow):
     def SF_calibration_loop(self):
         self.pid_parameters_list[0] += 0.3
         if self.controlled_joint.saggital_plane.angle >= self.desired_angle or self.pid_parameters_list[
-                0] >= 3:
+                0] >= 5:
             self.Proportional = self.pid_parameters_list[0]
             self.slider_P.setValue(int(self.Proportional / 100))
             print('Proportional calibrated', self.Proportional)
@@ -108,7 +112,7 @@ class App(PIDMainWindow):
                 len(self.oscilation_dict['angle']), 5 / len(self.oscilation_dict['angle']))
             self.oscilation_freq = self.oscilation_freq_array[self.max_oscilation_harm]
             self.Integral = 0.5 * 1 / self.oscilation_freq
-            self.Derivative = 0.125 * 1 / self.oscilation_freq
+            self.Derivative = 0.0675 * 1 / self.oscilation_freq
             self.slider_P.setValue(int(self.Proportional * 100))
             print('Proportional calibrated', self.Proportional)
             self.slider_I.setValue(int(self.Integral * 100))
@@ -117,8 +121,8 @@ class App(PIDMainWindow):
             print('Derivative calibrated', self.Derivative)
 
     def calibrate_PID(self):
-        self.Angleslider.setValue(int(100))
-        self.desired_angle = 100
+        self.Angleslider.setValue(int(50))
+        self.desired_angle = 50
         self.oscilation_dict = {}
         self.oscilation_dict['timestamp'] = []
         self.oscilation_dict['angle'] = []

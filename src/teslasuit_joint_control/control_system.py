@@ -7,8 +7,8 @@ from scipy.spatial.transform import Rotation as R
 from teslasuit_sdk.ts_mapper import TsBone2dIndex
 import os
 import sys
-ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
-sys.path.append(ts_api_path)
+# ts_api_path = os.environ['TESLASUIT_PYTHON_API_PATH']
+# sys.path.append(ts_api_path)
 
 
 @dataclass
@@ -188,7 +188,7 @@ class SkeletalModelUpdater():
                     self.ini_saggital_vec)
                 joint.saggital_plane.angle = np.arccos(
                     vec1.dot(vec2)) * 180 / np.pi
-                # print(joint.saggital_plane.angle)
+                print(joint.saggital_plane.angle)
 
             if joint.frontal_plane is not None:
 
@@ -262,6 +262,18 @@ class SimplePID():
             self.parameters_list[1],
             self.parameters_list[2])
 
+    def reset_pid(self):
+        self.pid = PID(
+            Kp=self.parameters_list[0],
+            Ki=self.parameters_list[1],
+            Kd=self.parameters_list[2],
+            setpoint=0,
+            sample_time=0.01,
+            output_limits=(
+                0,
+                100))
+    
+
 
 class PIDMuscleControler(SimplePID):
     """
@@ -310,8 +322,7 @@ class PIDMuscleControler(SimplePID):
         self.apply_pid(angular_error)
 
     def send_haptic_output(self):
-        self.suit.haptic_play_touch(
-            self.haptic_channel,
+        self.suit.haptic_play_touch(self.haptic_channel,
             pw=self.output,
             duration=100)
         print(
